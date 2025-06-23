@@ -1,4 +1,4 @@
-const clickhouse = require('../db');
+const clickhouse = require('../config/clickhouse');
 
 (async() => {
     const result = await clickhouse.query({
