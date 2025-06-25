@@ -1,14 +1,18 @@
 const clickhouse = require('../config/clickhouse');
 
-exports.getBTCPriceByDay = async () => {
+exports.getBTCPriceByDay = async (from , to ) => {
+  //Modified for the frontend 
+  let whereClause = `crypto_name = 'Bitcoin'`;
+  if (from) whereClause += ` AND trade_date >= toDate('${from}')`;
+  if (to) whereClause += ` AND trade_date <= toDate('${to}')`;
+
   const result = await clickhouse.query({
     query: `
       SELECT toDate(trade_date) AS date, AVG(price) AS avg_price
       FROM crypto_prices
-      WHERE crypto_name = 'Bitcoin'
+      WHERE ${whereClause}
       GROUP BY date
-      ORDER BY date
-      LIMIT 50
+      ORDER BY date 
     `,
     format: 'JSON',
   });
@@ -36,7 +40,7 @@ exports.getUKPricesByYear = async () => {
       SELECT toYear(date) AS year, AVG(price) AS avg_price, COUNT() AS total_sales
       FROM uk_price_paid
       GROUP BY year
-      ORDER BY year
+      ORDER BY year DESC
     `,
     format: 'JSON',
   });
