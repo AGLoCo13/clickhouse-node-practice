@@ -1,25 +1,33 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route , Navigate} from 'react-router-dom';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import './App.css'
-import routes from './routes';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {PublicRoutes , PrivateRoutes} from './routes';
+import {AuthProvider} from './context/AuthContext';
+
+const renderRoutes = (routes) => 
+  routes.map(({ path, element, children }, i) => (
+    <Route key={i} path={path} element={element}>
+      {children &&
+        children.map((child, j) => (
+          <Route key={j} path={child.path || ''} element={child.element}>
+            {child.children &&
+              child.children.map((nested, k) => (
+                <Route key={k} path={nested.path || ''} element={nested.element} />
+              ))}
+          </Route>
+        ))}
+    </Route>
+  ));
+
 
 const App = () => (
+  <AuthProvider>
   <Router>
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/dashboard" element={<Navigate to="/dashboard/bitcoin-price" />} />
-      <Route path="/dashboard/:view" element={<Dashboard />} /> 
-      {routes.map(d => {
-        return ( 
-          <LayoutComponent>
-        <Route path={d.path} element={d.element} />
-        </LayoutComponent>
-      )
-      })}
+      {renderRoutes(PublicRoutes)}
+      {renderRoutes(PrivateRoutes)}
     </Routes>
   </Router>
+  </AuthProvider>
 );
 
 export default App;

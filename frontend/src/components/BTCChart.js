@@ -66,7 +66,7 @@ const BTCChart = ({ data }) => {
     },
   };
 
-  return <Line data={chartData} options={options} />;
+  return <Line data={chartData} options={options}  />;
 };
 
 export default BTCChart;
