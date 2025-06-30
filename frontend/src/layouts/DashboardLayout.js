@@ -1,10 +1,10 @@
 // src/layouts/DashboardLayout.js
 import { useState, useEffect } from 'react';
-import { Outlet, useLocation }  from 'react-router-dom';
-import { Button }               from 'react-bootstrap';
-import Sidebar                  from '../components/Sidebar';
+import { Outlet, useLocation } from 'react-router-dom';
+import { Button, Row, Col, } from 'react-bootstrap';
+import Sidebar from '../components/Sidebar';
 
-export default function DashboardLayout () {
+export default function DashboardLayout(props) {
   /* ─────────────────────────────────── responsive helpers ─── */
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showMenu, setShowMenu] = useState(false);
@@ -21,7 +21,9 @@ export default function DashboardLayout () {
 
   /* ─────────────────────────────────────────────────────────────── */
   return (
-    <div className={isMobile ? '' : 'd-flex'} style={{ minHeight: '100vh' }}>
+    <div className='d-flex'>
+
+
       {/* ─────────── desktop sidebar ─────────── */}
       {!isMobile && (
         <Sidebar view={view} isMobile={false} onHide={toggleMenu} />
@@ -49,13 +51,17 @@ export default function DashboardLayout () {
         </>
       )}
 
+
+      {/* <div className='overflow-none'>
+        {props.children}
+      </div> */}
+
+
       {/* ─────────── main content ─────────── */}
-      <main
-        className="flex-grow-1 p-3"
-        style={{ paddingTop: isMobile ? 56 : undefined }}  /* push content below mobile header */
-      >
-        <Outlet />
-      </main>
+      <div>
+      {props.children}
+      </div>
+
     </div>
   );
 }

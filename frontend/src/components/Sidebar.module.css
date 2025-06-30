@@ -7,7 +7,7 @@
 }
 
 .sidebar {
-  width: 220px;
+  /* width: 220px; */
   display: flex;
   flex-direction: column;
   background: var(--sb-bg);
@@ -38,3 +38,57 @@
 .icon { font-size: 1.25rem; }
 
 .mt-auto { margin-top: auto; }
+
+.subMenu {
+  margin-left: 2.5rem;
+  margin-top: 0.3rem;
+}
+
+.subBtn {
+  display: block;
+  padding: 0.25rem 1rem;
+  color: #adb5bd;
+  font-size: 0.85rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 0.25rem;
+  text-align: left;
+  width: 100%;
+}
+
+.subBtn:hover,
+.subBtnActive {
+  color: #fff;
+  background-color: #495057;
+}
+
+.navCol {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.subMenu {
+  margin-left: 2rem;          /* indent under parent */
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.subBtn {
+  background: none;
+  border: none;
+  color: #cbd5e1;             
+  font-size: 0.9rem;
+  text-align: left;
+  padding: 0.15rem 0;
+  cursor: pointer;
+}
+
+.subBtn:hover {
+  color: #fff;
+}
+
+
+
+

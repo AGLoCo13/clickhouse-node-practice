@@ -6,14 +6,18 @@ import {
   MdHome,
   MdTimeline,
   MdLogout,
+
 } from 'react-icons/md';
+import {
+  FaBitcoin,
+  FaDollarSign
+} from 'react-icons/fa';
 
 import { AuthContext } from '../context/AuthContext';
 import cls from './Sidebar.module.css';
 
-/* -------------------------------------------------------------------------- */
-/*  Central nav definition – add / remove items here                          */
-/* -------------------------------------------------------------------------- */
+
+/*  Central nav definition – add / remove items here */
 const menu = [
   {
     label: 'Home',
@@ -25,22 +29,30 @@ const menu = [
     icon: <MdTimeline />,
     path: '/dashboard/analysis',       // ← still used for highlight logic
     children: [
-      { label: 'Bitcoin Prices',     path: '/dashboard/bitcoin-price' },
-      { label: 'UK Property Sales',  path: '/dashboard/uk-property-sales' },
+      {
+        label: 'Bitcoin Prices',
+        path: '/dashboard/bitcoin-price',
+        icon: <FaBitcoin />
+      },
+      {
+        label: 'UK Property Sales',
+        path: '/dashboard/uk-property-sales',
+        icon: <FaDollarSign />
+      },
     ],
   },
 ];
 
-/* -------------------------------------------------------------------------- */
+
 /*  Sidebar component                                                         */
-/* -------------------------------------------------------------------------- */
+
 export default function Sidebar({ view, show, onHide, isMobile }) {
   const { logout } = useContext(AuthContext);
-  const navigate   = useNavigate();
+  const navigate = useNavigate();
 
   /* ----------------------------- nav rendering ---------------------------- */
   const NavLinks = (
-    <nav className={cls.navCol}>
+    <nav className={cls.navCol} >
       {menu.map((item, i) => {
         const active = view && item.path.includes(view);
 
@@ -73,7 +85,11 @@ export default function Sidebar({ view, show, onHide, isMobile }) {
                       if (isMobile) onHide();
                     }}
                   >
-                    {child.label}
+                    <>
+                      <span className="me-2">{child.icon}</span>
+                      {child.label}
+                    </>
+
                   </button>
                 ))}
               </div>
@@ -83,9 +99,11 @@ export default function Sidebar({ view, show, onHide, isMobile }) {
       })}
 
       {/* ------------------------- logout -------------------------- */}
+      <div className="mt-auto d-flex justify-content-center py-3">
       <button className={`${cls.navBtn} ${cls.logout}`} onClick={logout}>
         <span className={cls.icon}><MdLogout /></span>Logout
       </button>
+      </div>
     </nav>
   );
 
@@ -107,5 +125,9 @@ export default function Sidebar({ view, show, onHide, isMobile }) {
   }
 
   /* --------------------------- desktop aside ----------------------------- */
-  return <aside className={cls.sidebar}>{NavLinks}</aside>;
+  return <aside 
+  className={cls.sidebar}
+  style={{height:'100vh',width: '220px',position:'relative'}}
+
+  >{NavLinks}</aside>;
 }

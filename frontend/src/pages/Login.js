@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 import styles from './Login.module.css';
 
 const Login = () => {
-  const { login } = useContext(AuthContext);   // ← uses the context helper
+  const { login } = useContext(AuthContext);  
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(email, password);            // ← talks to /auth/login
+      await login(email, password);            // talks to /auth/login
       navigate('/dashboard/bitcoin-price');    // default landing page
     } catch (err) {
       setErr('Invalid e-mail / password');
@@ -73,57 +73,6 @@ const Login = () => {
         </Card.Body>
       </Card>
     </div>
-    // <div className="d-flex justify-content-center align-items-center h-100">
-    //   <Card style={{ minWidth: 300 }}>
-    //     <Card.Header className="text-center fw-bold">Login</Card.Header>
-    //     <Card.Body>
-    //       {error && <Alert variant="danger">{error}</Alert>}
-
-    //       <form onSubmit={handleSubmit}>
-    //         <input
-    //           className="form-control mb-3"
-    //           type="email"
-    //           placeholder="Email"
-    //           autoComplete="username"
-    //           value={email}
-    //           onChange={(e) => setEmail(e.target.value)}
-    //           required
-    //         />
-
-    //         <input
-    //           className="form-control mb-4"
-    //           type="password"
-    //           placeholder="Password"
-    //           autoComplete="current-password"
-    //           value={password}
-    //           onChange={(e) => setPassword(e.target.value)}
-    //           required
-    //         />
-
-    //         <Button
-    //           type="submit"
-    //           className="w-100"
-    //           disabled={loading}
-    //           variant="primary"
-    //         >
-    //           {loading ? (
-    //             <>
-    //               <Spinner
-    //                 as="span"
-    //                 animation="border"
-    //                 size="sm"
-    //                 className="me-2"
-    //               />
-    //               Signing in…
-    //             </>
-    //           ) : (
-    //             'Login'
-    //           )}
-    //         </Button>
-    //       </form>
-    //     </Card.Body>
-    //   </Card>
-    // </div> 
   );
 };
 
