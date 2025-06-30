@@ -1,89 +1,111 @@
-import React from 'react';
-import { Button, Nav, Offcanvas } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+// src/components/Sidebar.js
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Offcanvas } from 'react-bootstrap';
+import {
+  MdHome,
+  MdTimeline,
+  MdLogout,
+} from 'react-icons/md';
+
 import { AuthContext } from '../context/AuthContext';
+import cls from './Sidebar.module.css';
 
-const Sidebar = ({ view, show, onHide, isMobile }) => {
-  const navigate = useNavigate();
+/* -------------------------------------------------------------------------- */
+/*  Central nav definition – add / remove items here                          */
+/* -------------------------------------------------------------------------- */
+const menu = [
+  {
+    label: 'Home',
+    icon: <MdHome />,
+    path: '/dashboard/bitcoin-price',
+  },
+  {
+    label: 'Analysis',
+    icon: <MdTimeline />,
+    path: '/dashboard/analysis',       // ← still used for highlight logic
+    children: [
+      { label: 'Bitcoin Prices',     path: '/dashboard/bitcoin-price' },
+      { label: 'UK Property Sales',  path: '/dashboard/uk-property-sales' },
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Sidebar component                                                         */
+/* -------------------------------------------------------------------------- */
+export default function Sidebar({ view, show, onHide, isMobile }) {
   const { logout } = useContext(AuthContext);
+  const navigate   = useNavigate();
 
-  const Menu = (
-    <Nav className="flex-column">
-      <Button
-        className="mb-2"
-        variant={view === 'bitcoin-price' ? 'primary' : 'outline-primary'}
-        onClick={() => {
-          navigate('/dashboard/bitcoin-price');
-          if (isMobile) onHide();
-        }}
-      >
-        Bitcoin Avg Price
-      </Button>
-      <Button
-        variant={view === 'uk-property-sales' ? 'success' : 'outline-success'}
-        onClick={() => {
-          navigate('/dashboard/uk-property-sales');
-          if (isMobile) onHide();
-        }}
-      >
-        UK Property Sales
-      </Button>
-    </Nav>
+  /* ----------------------------- nav rendering ---------------------------- */
+  const NavLinks = (
+    <nav className={cls.navCol}>
+      {menu.map((item, i) => {
+        const active = view && item.path.includes(view);
+
+        return (
+          <div key={i}>
+            {/* -------------------- top-level link -------------------- */}
+            <button
+              className={`${cls.navBtn} ${active ? cls.active : ''}`}
+              onClick={() => {
+                // Navigate immediately if the item has no children
+                if (!item.children) {
+                  navigate(item.path);
+                  if (isMobile) onHide();
+                }
+              }}
+            >
+              <span className={cls.icon}>{item.icon}</span>
+              {item.label}
+            </button>
+
+            {/* -------------------- child links ---------------------- */}
+            {item.children && (
+              <div className={cls.subMenu}>
+                {item.children.map((child, j) => (
+                  <button
+                    key={j}
+                    className={cls.subBtn}
+                    onClick={() => {
+                      navigate(child.path);
+                      if (isMobile) onHide();
+                    }}
+                  >
+                    {child.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* ------------------------- logout -------------------------- */}
+      <button className={`${cls.navBtn} ${cls.logout}`} onClick={logout}>
+        <span className={cls.icon}><MdLogout /></span>Logout
+      </button>
+    </nav>
   );
 
+  /* --------------------------- mobile canvas ----------------------------- */
   if (isMobile) {
     return (
-      <>
-        <div className='d-flex justify-content-end'>
-          <Button
-            onClick={onHide}
-          >Menu</Button>
-        </div>
-        <Offcanvas show={show} onHide={onHide} placement="end">
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Menu</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <div className='d-flex flex-column justify-content-between h-100'>
-            {Menu}
-            <div className="d-flex justify-content-center align-items-center my-4">
-              <Button className="md-2" variant="danger" onClick={logout}>
-                Logout
-              </Button>
-            </div> 
-            </div>
-          </Offcanvas.Body>
-        </Offcanvas>
-      </>
+      <Offcanvas
+        show={show}
+        onHide={onHide}
+        placement="start"
+        className={cls.canvas}
+      >
+        <Offcanvas.Header closeButton closeVariant="white">
+          <Offcanvas.Title>Menu</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>{NavLinks}</Offcanvas.Body>
+      </Offcanvas>
     );
   }
 
-  return (
-    <div
-      style={{
-        width: '220px',
-        background: '#f8f9fa',
-        padding: '20px',
-        borderRight: '1px solid #dee2e6',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        minHeight: '100vh',
-      }}
-    >
-      <div>
-        <h4>Menu</h4>
-        {Menu}
-      </div>
-      {/*Bottom-right aligned logout */}
-      <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-        <Button variant="danger" onClick={logout}>
-          Logout
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-export default Sidebar;
+  /* --------------------------- desktop aside ----------------------------- */
+  return <aside className={cls.sidebar}>{NavLinks}</aside>;
+}
