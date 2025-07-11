@@ -69,7 +69,7 @@ export default function Sidebar({ view, show, onHide, isMobile }) {
                 }
               }}
             >
-              <span className={cls.icon}>{item.icon}</span>
+              {item.icon}
               {item.label}
             </button>
 
@@ -86,7 +86,7 @@ export default function Sidebar({ view, show, onHide, isMobile }) {
                     }}
                   >
                     <>
-                      <span className="me-2">{child.icon}</span>
+                     {child.icon}
                       {child.label}
                     </>
 

@@ -7,12 +7,17 @@
 }
 
 .sidebar {
-  /* width: 220px; */
+  width: 220px;
   display: flex;
   flex-direction: column;
   background: var(--sb-bg);
   padding: 1rem .75rem;
   color: var(--sb-fg);
+  /*Adding css to prevent sidebar from stretching */
+  flex-shrink: 0;
+  position: sticky!important;
+  top: 0;
+  height: 100vh;
 }
 
 .canvas .offcanvas-header,
@@ -22,7 +27,7 @@
   all: unset;
   cursor: pointer;
   width: 100%;
-  padding: .6rem .75rem;
+  padding:  .75rem;
   margin-bottom: .25rem;
   display: flex;
   align-items: center;
@@ -31,6 +36,7 @@
   color: var(--sb-fg);
   border-radius: .35rem;
   transition: background .15s;
+  align-content: center;
 }
 .navBtn:hover  { background: var(--sb-hover); }
 .active        { color: var(--sb-active); font-weight: 600; }
@@ -72,17 +78,20 @@
   margin-left: 2rem;          /* indent under parent */
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.40rem;
 }
 
 .subBtn {
   background: none;
   border: none;
+  display: flex;
   color: #cbd5e1;             
   font-size: 0.9rem;
-  text-align: left;
-  padding: 0.15rem 0;
+  text-align: left; 
+  padding: 0.25rem ;
   cursor: pointer;
+  align-items: center;
+   gap: .4rem;
 }
 
 .subBtn:hover {
